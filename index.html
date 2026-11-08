@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="bn-BD">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08783b">
+<meta name="description" content="Fourteen Association হিসাব ব্যবস্থাপনা">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Fourteen Association</title>
+<style>
+:root{--green:#08783b;--deep:#075c30;--pale:#e8f6eb;--ink:#17231c;--muted:#617067;--line:#dce8df;--bg:#f6faf7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali",system-ui,sans-serif}
+header{background:linear-gradient(135deg,#08783b,#07552d);color:white;padding:22px 18px 26px;border-radius:0 0 26px 26px;display:flex;align-items:center;gap:13px}
+.logo{width:54px;height:54px;border:2px solid #ffffffb8;border-radius:50%;display:grid;place-items:center;font-size:27px;flex-shrink:0}
+.brand{flex:1;min-width:0}.brand h1{font-size:19px;line-height:1.2;margin:0 0 5px;font-weight:750}.brand p{margin:0;color:#d9f5e2;font-size:12px;letter-spacing:.3px}
+.iconbtn{border:0;background:#ffffff20;color:white;border-radius:12px;padding:10px;font-size:20px}
+main{max-width:680px;margin:auto;padding:17px 15px 90px}
+.summary{background:linear-gradient(120deg,#e8f7e9,#d9f0df);border:1px solid #b7dfbf;border-radius:20px;padding:18px 15px;display:flex;align-items:center;gap:14px;margin:8px 0 20px}
+.moneyicon{width:54px;height:54px;border-radius:17px;background:var(--green);color:white;display:grid;place-items:center;font-size:27px;flex-shrink:0}
+.sumlabel{font-size:14px;color:#315541;margin-bottom:3px}.sumvalue{font-size:29px;font-weight:800;color:#075c30;line-height:1.2;overflow-wrap:anywhere}.sumsub{font-size:12px;color:#54715d;margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border:1px solid var(--line);background:white;border-radius:17px;min-height:112px;padding:15px 12px;display:flex;align-items:center;gap:11px;text-align:left;box-shadow:0 2px 7px #183b2410;color:var(--ink)}
+.tile:active{transform:scale(.985)}.tile .ico{width:48px;height:48px;border-radius:15px;color:white;display:grid;place-items:center;font-size:23px;flex-shrink:0}
+.tile strong{font-size:15px;display:block;line-height:1.35}.tile small{font-size:11px;color:var(--muted);display:block;margin-top:4px}
+.green{background:#079447}.blue{background:#1673d1}.purple{background:#7042a6}.orange{background:#ee8500}.teal{background:#07969a}.navy{background:#1557a4}
+.sectionhead{font-size:17px;font-weight:750;margin:23px 2px 10px;color:#164c2d}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:14px;margin:10px 0}
+.activity{display:flex;align-items:center;gap:12px}.datebox{background:var(--pale);color:var(--green);padding:8px;border-radius:12px;font-weight:700;font-size:12px;text-align:center;min-width:48px}.activity p{margin:0;font-size:13px}.activity small{color:var(--muted)}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));backdrop-filter:blur(10px)}
+.bottom button{border:0;background:none;color:#65736a;font-size:11px;padding:4px 8px}.bottom button b{display:block;font-size:20px;margin-bottom:2px}.bottom button.active{color:var(--green);font-weight:800}
+.view{display:none}.view.active{display:block}
+.back{border:0;background:none;color:var(--green);font-size:14px;font-weight:700;padding:5px 0 13px}
+h2{font-size:20px;margin:4px 0 14px;color:#14532e}
+label{display:block;font-size:13px;font-weight:650;margin:12px 0 5px}
+input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px;background:white;font:inherit;font-size:14px;color:var(--ink)}
+.primary,.secondary,.danger{border:0;border-radius:11px;padding:12px 15px;font:inherit;font-weight:750;margin-top:14px;width:100%}.primary{background:var(--green);color:white}.secondary{background:var(--pale);color:var(--green)}.danger{background:#fff0ee;color:#b42318}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.listitem{padding:12px 2px;border-bottom:1px solid #edf2ee;display:flex;justify-content:space-between;gap:10px;font-size:13px}.listitem:last-child{border:0}
+.pill{font-size:11px;background:#edf7ef;color:#17653a;border-radius:30px;padding:4px 8px;white-space:nowrap}
+.muted{color:var(--muted);font-size:12px}.empty{padding:22px;text-align:center;color:var(--muted);font-size:13px}
+.notice{font-size:12px;line-height:1.6;color:#52675a;background:#f0f7f1;border-radius:12px;padding:12px;margin-top:14px}
+.hidden{display:none!important}
+@media(max-width:380px){.tile{gap:8px;padding:12px 9px}.tile .ico{width:40px;height:40px}.tile strong{font-size:13px}.sumvalue{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">👥</div>
+ <div class="brand"><h1>Fourteen Association</h1><p>একতা • সহযোগিতা • উন্নয়ন</p></div>
+ <button class="iconbtn" onclick="openView('settings')" aria-label="সেটিংস">⚙</button>
+</header>
+<main>
+<section id="home" class="view active">
+ <div class="summary">
+  <div class="moneyicon">৳</div>
+  <div style="min-width:0"><div class="sumlabel">সংগঠনের মোট জমা</div><div class="sumvalue" id="totalCollected">৳ ০</div><div class="sumsub">মে ২০২৬ থেকে এ পর্যন্ত এন্ট্রি করা জমা</div></div>
+ </div>
+ <div class="grid">
+  <button class="tile" onclick="openView('payment')"><span class="ico green">৳</span><span><strong>টাকা জমা এন্ট্রি</strong><small>নতুন জমা যোগ করুন</small></span></button>
+  <button class="tile" onclick="openView('members')"><span class="ico blue">👥</span><span><strong>সদস্য তালিকা</strong><small>সদস্য ও চাঁদার তথ্য</small></span></button>
+  <button class="tile" onclick="openView('reports')"><span class="ico purple">▥</span><span><strong>মাসিক রিপোর্ট</strong><small>জমার সারসংক্ষেপ</small></span></button>
+  <button class="tile" onclick="openView('dues')"><span class="ico orange">!</span><span><strong>বকেয়া তালিকা</strong><small>বকেয়া ও জরিমানা</small></span></button>
+  <button class="tile" onclick="openView('settings')"><span class="ico teal">⚙</span><span><strong>সেটিংস</strong><small>হিসাবের নিয়ম</small></span></button>
+  <button class="tile" onclick="exportBackup()"><span class="ico navy">⬇</span><span><strong>ডেটা ব্যাকআপ</strong><small>তথ্য সংরক্ষণ করুন</small></span></button>
+ </div>
+ <div class="sectionhead">সাম্প্রতিক কার্যক্রম</div>
+ <div class="panel" id="recent"><div class="empty">এখনো কোনো জমার এন্ট্রি নেই।</div></div>
+ <div class="notice">হিসাব শুরু: মে ২০২৬ · মাসিক জমার শেষ তারিখ: ৩০ তারিখ (ফেব্রুয়ারিতে মাসের শেষ দিন)। বকেয়া থাকলে পরের মাস থেকে মূল চাঁদার ৫% জরিমানা প্রযোজ্য।</div>
+</section>
+
+<section id="payment" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>টাকা জমা এন্ট্রি</h2>
+ <label>সদস্য নির্বাচন</label><select id="payMember"></select>
+ <div class="row"><div><label>জমার পরিমাণ (৳)</label><input id="payAmount" type="number" min="1" inputmode="numeric" placeholder="যেমন ২০০০"></div><div><label>জমার তারিখ</label><input id="payDate" type="date"></div></div>
+ <label>জমার মাধ্যম</label><select id="payMethod"><option>বিকাশ</option><option>নগদ</option><option>ব্যাংক</option></select>
+ <button class="primary" onclick="addPayment()">জমা সংরক্ষণ করুন</button>
+ <p class="muted">আংশিক জমাও এন্ট্রি করা যাবে। পুরোনো বকেয়া আগে সমন্বয়ের হিসাব রিপোর্টে দেখানো হবে।</p>
+</section>
+
+<section id="members" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>সদস্য তালিকা</h2>
+ <button class="secondary" onclick="document.getElementById('addMemberForm').classList.toggle('hidden')">＋ নতুন সদস্য যোগ করুন</button>
+ <div id="addMemberForm" class="panel hidden"><label>সদস্যের নাম</label><input id="newName" placeholder="নাম লিখুন"><label>মাসিক চাঁদা (৳)</label><input id="newShare" type="number" min="1" inputmode="numeric" placeholder="যেমন ১০০০"><button class="primary" onclick="addMember()">সদস্য সংরক্ষণ</button></div>
+ <div id="memberList" class="panel"></div>
+</section>
+
+<section id="reports" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>মাসিক রিপোর্ট</h2>
+ <label>মাস নির্বাচন</label><input type="month" id="reportMonth" value="2026-11" onchange="renderReport()">
+ <div class="panel" id="reportContent"></div>
+</section>
+
+<section id="dues" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>বকেয়া তালিকা</h2>
+ <p class="muted">এটি প্রাথমিক হিসাব-প্রদর্শন। জরিমানার চূড়ান্ত সমন্বয় যাচাই করে পরবর্তী সংস্করণে সম্পূর্ণ করা হবে।</p>
+ <div class="panel" id="duesContent"></div>
+</section>
+
+<section id="history" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>জমার ইতিহাস</h2>
+ <p class="muted">এ পর্যন্ত এন্ট্রি করা সব জমার রেকর্ড।</p>
+ <div class="panel" id="historyContent"></div>
+</section>
+
+<section id="info" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>সংগঠন ও হিসাবের তথ্য</h2>
+ <div class="panel">
+  <div class="listitem"><span>সংগঠনের নাম</span><b>Fourteen Association</b></div>
+  <div class="listitem"><span>স্লোগান</span><b>একতা • সহযোগিতা • উন্নয়ন</b></div>
+  <div class="listitem"><span>হিসাব শুরুর মাস</span><b>মে ২০২৬</b></div>
+  <div class="listitem"><span>বর্তমান প্রাথমিক সদস্য</span><b>৩১ জন</b></div>
+  <div class="listitem"><span>প্রাথমিক মাসিক মোট চাঁদা</span><b>৳ ৫১,০০০</b></div>
+ </div>
+ <div class="panel"><b>হিসাবের নিয়ম</b>
+  <div class="listitem"><span>মাসিক জমার শেষ তারিখ</span><b>৩০ তারিখ</b></div>
+  <div class="listitem"><span>জরিমানা</span><b>মূল চাঁদার ৫% / বকেয়া মাস</b></div>
+  <div class="listitem"><span>জমার মাধ্যম</span><b>বিকাশ, নগদ, ব্যাংক</b></div>
+  <p class="muted">ফেব্রুয়ারি মাসে শেষ তারিখ হবে মাসের শেষ দিন। জরিমানা ও বকেয়া সমন্বয়ের পূর্ণাঙ্গ হিসাব পরবর্তী সংস্করণে যুক্ত ও যাচাই করা হবে।</p>
+ </div>
+</section>
+
+<section id="settings" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>সেটিংস</h2>
+ <div class="panel"><b>হিসাবের নিয়ম</b><div class="listitem"><span>হিসাব শুরুর মাস</span><b>মে ২০২৬</b></div><div class="listitem"><span>জমার শেষ তারিখ</span><b>৩০ তারিখ</b></div><div class="listitem"><span>জরিমানা</span><b>মূল চাঁদার ৫% / মাস</b></div><div class="listitem"><span>জমার মাধ্যম</span><b>বিকাশ, নগদ, ব্যাংক</b></div></div>
+ <div class="notice">এই সংস্করণে তথ্য এই ফোনের ব্রাউজারে সংরক্ষিত থাকবে। ব্রাউজারের ডেটা মুছে গেলে তথ্য হারাতে পারে। নিয়মিত ব্যাকআপ ডাউনলোড করে রাখবে।</div>
+ <button class="secondary" onclick="exportBackup()">ডেটা ব্যাকআপ ডাউনলোড</button>
+ <label style="margin-top:18px">আগের ব্যাকআপ পুনরুদ্ধার</label><input type="file" id="restoreFile" accept=".json,application/json" onchange="restoreBackup(event)">
+</section>
+</main>
+<nav class="bottom">
+ <button class="active" data-view="home" onclick="openView('home')"><b>⌂</b>হোম</button>
+ <button data-view="history" onclick="openView('history')"><b>◷</b>ইতিহাস</button>
+ <button data-view="members" onclick="openView('members')"><b>♟</b>সদস্য</button>
+ <button data-view="reports" onclick="openView('reports')"><b>▥</b>রিপোর্ট</button>
+ <button data-view="info" onclick="openView('info')"><b>ⓘ</b>তথ্য</button>
+</nav>
+<script>
+const seed = [
+["ADNAN AL JABER",5000],["MARUF HOSSEN",2000],["YEASIN ARAFAT",2000],["SAJJAD SABBIR",3000],["RAKIB UDDIN",1000],["MD. HASAN",1000],["MD. ANWAR",3000],["MD. RASHED",1000],["SALEH AKRAM",1000],["RAKIB HOSSEN",1000],["ASADUL ISLAM",1000],["ANWAR HOSSEN",1000],["IBRAHIM SAJIB",2000],["AL AMIN",2000],["MD. RIAD",1000],["MD. TOUHID",1000],["MD. SAGOR",1000],["SAJJAD NISHAD",2000],["MD. RAIHAN",1000],["MD. SAHARAJ",1000],["MD. BABAR",1000],["MD. ISMAIL",1000],["DELWAR HOSSEN",1000],["AH RAJU",1000],["AL NOMAN",1000],["MOHIN UDDIN",1000],["MD. ELIAS",1000],["AMIR HOSSAIN",6000],["APON UDDIN",3000],["AKRAM HOSSEN",1000],["SADDAM HOSSEN",1000]
+];
+const KEY='fourteenAssociationDataV1';
+let data=JSON.parse(localStorage.getItem(KEY)||'null');
+if(!data){data={members:seed.map((x,i)=>({id:i+1,name:x[0],share:x[1],active:true,paused:false})),payments:[]};save();}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll();}
+function money(n){return '৳ '+Number(n||0).toLocaleString('bn-BD')}
+function bnDate(s){try{return new Date(s+'T00:00:00').toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'})}catch(e){return s}}
+function openView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));renderAll();window.scrollTo(0,0)}
+function renderAll(){
+ document.getElementById('totalCollected').textContent=money(data.payments.reduce((a,p)=>a+Number(p.amount),0));
+ const recent=[...data.payments].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
+ document.getElementById('recent').innerHTML=recent.length?recent.map(p=>{let m=data.members.find(x=>x.id===p.memberId);return `<div class="listitem"><span><b>${esc(m?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`}).join(''):'<div class="empty">এখনো কোনো জমার এন্ট্রি নেই।</div>';
+ const sel=document.getElementById('payMember');if(sel){let old=sel.value;sel.innerHTML=data.members.filter(m=>m.active).map(m=>`<option value="${m.id}">${esc(m.name)} — ${money(m.share)}</option>`).join('');if(old)sel.value=old}
+ document.getElementById('memberList').innerHTML=data.members.map(m=>`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মাসিক চাঁদা: ${money(m.share)}</small></span><span class="pill">${m.active?'সক্রিয়':'নিষ্ক্রিয়'}</span></div>`).join('');
+ renderReport();renderDues();renderHistory();
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function addPayment(){
+ let id=Number(document.getElementById('payMember').value),amount=Number(document.getElementById('payAmount').value),date=document.getElementById('payDate').value,method=document.getElementById('payMethod').value;
+ if(!id||!Number.isFinite(amount)||amount<=0||!date){alert('সদস্য, সঠিক জমার পরিমাণ ও তারিখ দাও।');return}
+ if(date<'2026-05-01'){alert('হিসাব মে ২০২৬ থেকে শুরু।');return}
+ data.payments.push({id:Date.now(),memberId:id,amount,date,method});document.getElementById('payAmount').value='';save();alert('জমার তথ্য সংরক্ষিত হয়েছে।');openView('home');
+}
+function addMember(){
+ let name=document.getElementById('newName').value.trim(),share=Number(document.getElementById('newShare').value);
+ if(!name||share<=0){alert('নাম ও সঠিক মাসিক চাঁদা লিখুন।');return}
+ data.members.push({id:Date.now(),name,share,active:true,paused:false});document.getElementById('newName').value='';document.getElementById('newShare').value='';document.getElementById('addMemberForm').classList.add('hidden');save();alert('নতুন সদস্য যোগ হয়েছে।');
+}
+function monthList(end){let out=[],d=new Date(2026,4,1),last=new Date(end+'-01T00:00:00');while(d<=last){out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));d.setMonth(d.getMonth()+1)}return out}
+function renderHistory(){
+ const items=[...data.payments].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ document.getElementById('historyContent').innerHTML=items.length?items.map(p=>`<div class="listitem"><span><b>${esc(data.members.find(m=>m.id===p.memberId)?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`).join(''):'<div class="empty">এখনো কোনো জমার ইতিহাস নেই।</div>';
+}
+function renderReport(){
+ let month=document.getElementById('reportMonth')?.value||'2026-11',payments=data.payments.filter(p=>p.date.slice(0,7)===month),total=payments.reduce((a,p)=>a+p.amount,0);
+ document.getElementById('reportContent').innerHTML=`<div class="listitem"><span>এই মাসে মোট জমা</span><b>${money(total)}</b></div><div class="listitem"><span>জমার এন্ট্রি</span><b>${payments.length}টি</b></div>`+(payments.length?payments.map(p=>`<div class="listitem"><span>${esc(data.members.find(m=>m.id===p.memberId)?.name||'সদস্য')}<br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`).join(''):'<div class="empty">এই মাসে কোনো জমার তথ্য নেই।</div>');
+}
+function renderDues(){
+ let current=new Date(),end=current.getFullYear()+'-'+String(current.getMonth()+1).padStart(2,'0'),months=monthList(end);
+ let html='';
+ data.members.filter(m=>m.active).forEach(m=>{
+  let paid=data.payments.filter(p=>p.memberId===m.id).reduce((a,p)=>a+p.amount,0);
+  let expected=m.share*months.length;
+  let rough=Math.max(0,expected-paid);
+  if(rough>0)html+=`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মোট নির্ধারিত ${money(expected)} · মোট জমা ${money(paid)}</small></span><b>${money(rough)}</b></div>`;
+ });
+ document.getElementById('duesContent').innerHTML=html||'<div class="empty">এই সরল হিসাবে কোনো বকেয়া দেখা যাচ্ছে না।</div>';
+}
+function exportBackup(){
+ let blob=new Blob([JSON.stringify({app:'Fourteen Association',version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fourteen-association-backup.json';a.click();URL.revokeObjectURL(url);
+}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.data?.members||!x.data?.payments)throw Error();if(confirm('বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসাবেন?')){data=x.data;save();alert('ব্যাকআপ পুনরুদ্ধার হয়েছে।')}}catch(err){alert('এই ব্যাকআপ ফাইলটি সঠিক নয়।')}};r.readAsText(f)}
+document.getElementById('payDate').value=new Date().toISOString().slice(0,10);
+renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>

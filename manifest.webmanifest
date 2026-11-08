@@ -1,0 +1,10 @@
+{
+  "name": "Fourteen Association",
+  "short_name": "Fourteen",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6faf7",
+  "theme_color": "#08783b",
+  "description": "Fourteen Association হিসাব ব্যবস্থাপনা",
+  "icons": []
+}
