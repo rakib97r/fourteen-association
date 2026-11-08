@@ -44,6 +44,7 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
 .notice{font-size:12px;line-height:1.6;color:#52675a;background:#f0f7f1;border-radius:12px;padding:12px;margin-top:14px}
 .hidden{display:none!important}
 @media(max-width:380px){.tile{gap:8px;padding:12px 9px}.tile .ico{width:40px;height:40px}.tile strong{font-size:13px}.sumvalue{font-size:25px}}
+.smallbtn{padding:8px 10px;font-size:12px;margin:2px}.profilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.profilegrid>div{min-width:0}.filehint{font-size:12px;color:var(--muted)}.docitem{padding:9px 0;border-bottom:1px solid var(--line)}.docitem a{color:var(--green);font-weight:700}.danger{background:#fff0ef;color:#a52b20}
 </style>
 </head>
 <body>
@@ -85,6 +86,11 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
  <button class="secondary" onclick="document.getElementById('addMemberForm').classList.toggle('hidden')">＋ নতুন সদস্য যোগ করুন</button>
  <div id="addMemberForm" class="panel hidden"><label>সদস্যের নাম</label><input id="newName" placeholder="নাম লিখুন"><label>মাসিক চাঁদা (৳)</label><input id="newShare" type="number" min="1" inputmode="numeric" placeholder="যেমন ১০০০"><button class="primary" onclick="addMember()">সদস্য সংরক্ষণ</button></div>
  <div id="memberList" class="panel"></div>
+</section>
+
+<section id="memberProfile" class="view">
+ <button class="back" onclick="openView('members')">← সদস্য তালিকায় ফিরুন</button><h2 id="profileTitle">সদস্য প্রোফাইল</h2>
+ <div class="panel" id="profileContent"></div>
 </section>
 
 <section id="reports" class="view">
@@ -143,7 +149,7 @@ const seed = [
 ];
 const KEY='fourteenAssociationDataV1';
 let data=JSON.parse(localStorage.getItem(KEY)||'null');
-if(!data){data={members:seed.map((x,i)=>({id:i+1,name:x[0],share:x[1],active:true,paused:false})),payments:[]};save();}
+if(!data){data={members:seed.map((x,i)=>({id:i+1,name:x[0],share:x[1],active:true,paused:false,profile:{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]}})),payments:[]};save();}\ndata.members.forEach(m=>{m.profile=m.profile||{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]};m.profile.documents=m.profile.documents||[];m.paused=!!m.paused;});
 function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll();}
 function money(n){return '৳ '+Number(n||0).toLocaleString('bn-BD')}
 function bnDate(s){try{return new Date(s+'T00:00:00').toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'})}catch(e){return s}}
@@ -153,7 +159,7 @@ function renderAll(){
  const recent=[...data.payments].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
  document.getElementById('recent').innerHTML=recent.length?recent.map(p=>{let m=data.members.find(x=>x.id===p.memberId);return `<div class="listitem"><span><b>${esc(m?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`}).join(''):'<div class="empty">এখনো কোনো জমার এন্ট্রি নেই।</div>';
  const sel=document.getElementById('payMember');if(sel){let old=sel.value;sel.innerHTML=data.members.filter(m=>m.active).map(m=>`<option value="${m.id}">${esc(m.name)} — ${money(m.share)}</option>`).join('');if(old)sel.value=old}
- document.getElementById('memberList').innerHTML=data.members.map(m=>`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মাসিক চাঁদা: ${money(m.share)}</small></span><span class="pill">${m.active?'সক্রিয়':'নিষ্ক্রিয়'}</span></div>`).join('');
+ document.getElementById('memberList').innerHTML=data.members.map(m=>`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মাসিক শেয়ার: ${money(m.share)} · ${m.active?'সক্রিয়':'নিষ্ক্রিয়'}</small></span><span><button class="secondary smallbtn" onclick="openMemberProfile(${m.id})">প্রোফাইল</button></span></div>`).join('');
  renderReport();renderDues();renderHistory();
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -166,7 +172,63 @@ function addPayment(){
 function addMember(){
  let name=document.getElementById('newName').value.trim(),share=Number(document.getElementById('newShare').value);
  if(!name||share<=0){alert('নাম ও সঠিক মাসিক চাঁদা লিখুন।');return}
- data.members.push({id:Date.now(),name,share,active:true,paused:false});document.getElementById('newName').value='';document.getElementById('newShare').value='';document.getElementById('addMemberForm').classList.add('hidden');save();alert('নতুন সদস্য যোগ হয়েছে।');
+ data.members.push({id:Date.now(),name,share,active:true,paused:false,profile:{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]}});document.getElementById('newName').value='';document.getElementById('newShare').value='';document.getElementById('addMemberForm').classList.add('hidden');save();alert('নতুন সদস্য যোগ হয়েছে।');
+}
+
+let activeProfileId=null;
+function openMemberProfile(id){
+ activeProfileId=id;const m=data.members.find(x=>x.id===id);if(!m)return;
+ const p=m.profile||{};document.getElementById('profileTitle').textContent=m.name+' — প্রোফাইল';
+ const docs=(p.documents||[]).map((d,i)=>`<div class="docitem">📎 ${esc(d.name)} <a href="${d.data}" download="${esc(d.name)}">ডাউনলোড</a> <button class="secondary smallbtn danger" onclick="removeMemberDoc(${i})">মুছুন</button></div>`).join('')||'<p class="muted">এখনো কোনো ফরম বা নথি আপলোড করা হয়নি।</p>';
+ const paid=data.payments.filter(x=>x.memberId===id).reduce((a,x)=>a+Number(x.amount),0);
+ document.getElementById('profileContent').innerHTML=`
+ <div class="listitem"><b>মাসিক শেয়ার</b><b>${money(m.share)}</b></div>
+ <label>সদস্যের নাম</label><input id="pfName" value="${esc(m.name)}">
+ <div class="profilegrid"><div><label>পিতার নাম</label><input id="pfFather" value="${esc(p.father||'')}"></div><div><label>মাতার নাম</label><input id="pfMother" value="${esc(p.mother||'')}"></div></div>
+ <label>মোবাইল নম্বর</label><input id="pfPhone" value="${esc(p.phone||'')}" inputmode="tel">
+ <label>ঠিকানা</label><textarea id="pfAddress" rows="2">${esc(p.address||'')}</textarea>
+ <label>সদস্য হওয়ার তারিখ</label><input id="pfJoin" type="date" value="${esc(p.joinDate||'')}">
+ <label>অন্যান্য তথ্য</label><textarea id="pfNotes" rows="2">${esc(p.notes||'')}</textarea>
+ <button class="primary" onclick="saveMemberProfile()">প্রোফাইল সংরক্ষণ</button>
+ <hr><h3>শেয়ারের পরিমাণ পরিবর্তন</h3><p class="muted">নতুন শেয়ার মে ২০২৬ থেকে কার্যকর হবে। পুরোনো জমার এন্ট্রি অপরিবর্তিত থাকবে।</p>
+ <label>নতুন মাসিক শেয়ার (৳)</label><input id="pfShare" type="number" min="1" value="${m.share}">
+ <button class="secondary" onclick="changeMemberShare()">শেয়ার পরিবর্তন সংরক্ষণ</button>
+ <hr><h3>জরিমানা নিয়ন্ত্রণ</h3><div class="listitem"><span>জরিমানার অবস্থা</span><b>${m.paused?'বন্ধ':'চালু'}</b></div>
+ <button class="secondary" onclick="toggleFinePause()">${m.paused?'জরিমানা পুনরায় চালু':'জরিমানা Pause করুন'}</button>
+ <hr><h3>সদস্য ফরম ও নথি</h3><label>ফরম/নথি আপলোড (PDF, JPG, PNG)</label><input id="pfDoc" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+ <p class="filehint">ছোট ফাইল আপলোড করো (প্রতি ফাইল সর্বোচ্চ ১.৫ MB)। ডেটা এই ফোনের ব্রাউজারে থাকবে; ব্যাকআপে নথিও যুক্ত হবে।</p>
+ <button class="secondary" onclick="uploadMemberDoc()">নথি সংরক্ষণ</button>${docs}
+ <hr><h3>আর্থিক সারসংক্ষেপ</h3><div class="listitem"><span>এ পর্যন্ত মোট জমা</span><b>${money(paid)}</b></div>
+ `;
+ openView('memberProfile');
+}
+function saveMemberProfile(){
+ const m=data.members.find(x=>x.id===activeProfileId);if(!m)return;
+ const val=id=>document.getElementById(id).value.trim();
+ m.name=val('pfName')||m.name;m.profile={...(m.profile||{}),father:val('pfFather'),mother:val('pfMother'),phone:val('pfPhone'),address:val('pfAddress'),joinDate:val('pfJoin'),notes:val('pfNotes'),documents:m.profile?.documents||[]};
+ save();openMemberProfile(m.id);alert('সদস্যের প্রোফাইল সংরক্ষিত হয়েছে।');
+}
+function changeMemberShare(){
+ const m=data.members.find(x=>x.id===activeProfileId),v=Number(document.getElementById('pfShare').value);
+ if(!m||!Number.isFinite(v)||v<=0){alert('সঠিক শেয়ারের পরিমাণ লিখুন।');return}
+ if(v===Number(m.share))return alert('শেয়ারের পরিমাণে কোনো পরিবর্তন হয়নি।');
+ if(!confirm(`মাসিক শেয়ার ${money(m.share)} থেকে ${money(v)} হবে। এটি মে ২০২৬ থেকে সব মাসে কার্যকর হবে। নিশ্চিত?`))return;
+ m.shareHistory=m.shareHistory||[];m.shareHistory.push({oldShare:m.share,newShare:v,changedAt:new Date().toISOString(),effectiveFrom:'2026-05'});
+ m.share=v;save();openMemberProfile(m.id);alert('শেয়ারের পরিমাণ মে ২০২৬ থেকে পরিবর্তন করা হয়েছে।');
+}
+function toggleFinePause(){
+ const m=data.members.find(x=>x.id===activeProfileId);if(!m)return;
+ m.paused=!m.paused;m.finePauseHistory=m.finePauseHistory||[];m.finePauseHistory.push({paused:m.paused,at:new Date().toISOString()});
+ save();openMemberProfile(m.id);alert(m.paused?'এই সদস্যের জরিমানা Pause হয়েছে।':'এই সদস্যের জরিমানা আবার চালু হয়েছে।');
+}
+function uploadMemberDoc(){
+ const m=data.members.find(x=>x.id===activeProfileId),f=document.getElementById('pfDoc').files[0];if(!m||!f)return alert('আগে একটি ফাইল নির্বাচন করো।');
+ if(f.size>1.5*1024*1024)return alert('ফাইলটি ১.৫ MB-এর বেশি। ছোট ফাইল ব্যবহার করো।');
+ const r=new FileReader();r.onload=()=>{m.profile.documents.push({name:f.name,type:f.type,data:r.result});try{save();openMemberProfile(m.id);alert('নথি সংরক্ষিত হয়েছে।')}catch(e){alert('সংরক্ষণ করা যায়নি। জায়গা কম থাকতে পারে।')}};r.readAsDataURL(f);
+}
+function removeMemberDoc(i){
+ const m=data.members.find(x=>x.id===activeProfileId);if(!m||!confirm('এই নথিটি মুছে ফেলবে?'))return;
+ m.profile.documents.splice(i,1);save();openMemberProfile(m.id);
 }
 function monthList(end){let out=[],d=new Date(2026,4,1),last=new Date(end+'-01T00:00:00');while(d<=last){out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));d.setMonth(d.getMonth()+1)}return out}
 function renderHistory(){
