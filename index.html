@@ -45,6 +45,7 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
 .hidden{display:none!important}
 @media(max-width:380px){.tile{gap:8px;padding:12px 9px}.tile .ico{width:40px;height:40px}.tile strong{font-size:13px}.sumvalue{font-size:25px}}
 .smallbtn{padding:8px 10px;font-size:12px;margin:2px}.profilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.profilegrid>div{min-width:0}.filehint{font-size:12px;color:var(--muted)}.docitem{padding:9px 0;border-bottom:1px solid var(--line)}.docitem a{color:var(--green);font-weight:700}.danger{background:#fff0ef;color:#a52b20}
+.modal-backdrop{position:fixed;inset:0;background:#10201699;display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}.modal-backdrop.show{display:flex}.modal-card{background:#fff;width:100%;max-width:480px;max-height:90vh;overflow:auto;border-radius:20px;padding:20px;box-shadow:0 16px 50px #0003}.modal-card h2{margin:0 0 8px}.modal-actions{display:flex;gap:10px;margin-top:8px}.modal-actions button{flex:1}
 </style>
 </head>
 <body>
@@ -57,19 +58,20 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
 <section id="home" class="view active">
  <div class="summary">
   <div class="moneyicon">৳</div>
-  <div style="min-width:0"><div class="sumlabel">সংগঠনের মোট জমা</div><div class="sumvalue" id="totalCollected">৳ ০</div><div class="sumsub">মে ২০২৬ থেকে এ পর্যন্ত এন্ট্রি করা জমা</div></div>
+  <div style="min-width:0"><div class="sumlabel">সংগঠনের মোট জমা</div><div class="sumvalue" id="totalCollected">৳ ০</div><div class="sumsub">মে ২০২৬ থেকে এ পর্যন্ত সদস্যদের শেয়ার জমা</div></div>
  </div>
  <div class="grid">
   <button class="tile" onclick="openView('payment')"><span class="ico green">৳</span><span><strong>টাকা জমা এন্ট্রি</strong><small>নতুন জমা যোগ করুন</small></span></button>
   <button class="tile" onclick="openView('members')"><span class="ico blue">👥</span><span><strong>সদস্য তালিকা</strong><small>সদস্য ও চাঁদার তথ্য</small></span></button>
   <button class="tile" onclick="openView('reports')"><span class="ico purple">▥</span><span><strong>মাসিক রিপোর্ট</strong><small>জমার সারসংক্ষেপ</small></span></button>
-  <button class="tile" onclick="openView('dues')"><span class="ico orange">!</span><span><strong>বকেয়া তালিকা</strong><small>বকেয়া ও জরিমানা</small></span></button>
+  <button class="tile" onclick="openView('dues')"><span class="ico orange">!</span><span><strong>বকেয়া তালিকা</strong><small>শুধু শেয়ারের বকেয়া</small></span></button>
+  <button class="tile" onclick="openView('fines')"><span class="ico orange">৳</span><span><strong>জরিমানার বিবরণ</strong><small>আদায়কৃত জরিমানার হিসাব</small></span></button>
   <button class="tile" onclick="openView('settings')"><span class="ico teal">⚙</span><span><strong>সেটিংস</strong><small>হিসাবের নিয়ম</small></span></button>
   <button class="tile" onclick="exportBackup()"><span class="ico navy">⬇</span><span><strong>ডেটা ব্যাকআপ</strong><small>তথ্য সংরক্ষণ করুন</small></span></button>
  </div>
  <div class="sectionhead">সাম্প্রতিক কার্যক্রম</div>
  <div class="panel" id="recent"><div class="empty">এখনো কোনো জমার এন্ট্রি নেই।</div></div>
- <div class="notice">হিসাব শুরু: মে ২০২৬ · মাসিক জমার শেষ তারিখ: ৩০ তারিখ (ফেব্রুয়ারিতে মাসের শেষ দিন)। বকেয়া থাকলে পরের মাস থেকে মূল চাঁদার ৫% জরিমানা প্রযোজ্য।</div>
+ <div class="notice">হিসাব শুরু: মে ২০২৬ · মাসিক জমার শেষ তারিখ: ৩০ তারিখ (ফেব্রুয়ারিতে মাসের শেষ দিন)। জরিমানার আদায় আলাদা খাতায় এন্ট্রি করতে হবে; মূল জমার সঙ্গে মেশানো যাবে না।</div>
 </section>
 
 <section id="payment" class="view">
@@ -101,8 +103,21 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
 
 <section id="dues" class="view">
  <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>বকেয়া তালিকা</h2>
- <p class="muted">এটি প্রাথমিক হিসাব-প্রদর্শন। জরিমানার চূড়ান্ত সমন্বয় যাচাই করে পরবর্তী সংস্করণে সম্পূর্ণ করা হবে।</p>
+ <p class="muted">মে ২০২৬ থেকে নির্বাচিত বর্তমান মাস পর্যন্ত হিসাব। জমা আগে সবচেয়ে পুরোনো মাসের চাঁদায় সমন্বয় হবে; অতিরিক্ত টাকা অগ্রিম হিসেবে দেখানো হবে। জরিমানা আলাদা খাতায় থাকবে।</p>
  <div class="panel" id="duesContent"></div>
+</section>
+
+<section id="fines" class="view">
+ <button class="back" onclick="openView('home')">← হোমে ফিরুন</button><h2>জরিমানা খাতা</h2>
+ <div class="summary" style="background:#fff8e8;border-color:#f2dfb1"><div><div class="sumlabel">মোট জরিমানা আদায়</div><div class="sumvalue" id="fineLedgerTotal" style="color:#8a5600">৳ ০</div></div></div>
+ <div class="panel"><h3>জরিমানা জমা এন্ট্রি</h3>
+  <label>সদস্য নির্বাচন</label><select id="fineMember"></select>
+  <label>কোন মাসের জরিমানা</label><input id="fineMonth" type="month" value="2026-11">
+  <div class="row"><div><label>জরিমানার পরিমাণ (৳)</label><input id="fineAmount" type="number" min="1" inputmode="numeric" placeholder="যেমন ১০০"></div><div><label>জমার তারিখ</label><input id="fineDate" type="date"></div></div>
+  <label>জমার মাধ্যম</label><select id="fineMethod"><option>বিকাশ</option><option>নগদ</option><option>ব্যাংক</option></select>
+  <button class="primary" onclick="addFine()">জরিমানা সংরক্ষণ</button>
+ </div>
+ <div class="panel"><h3>জরিমানা আদায়ের ইতিহাস</h3><div id="fineHistory"></div></div>
 </section>
 
 <section id="history" class="view">
@@ -126,6 +141,17 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
   <div class="listitem"><span>জমার মাধ্যম</span><b>বিকাশ, নগদ, ব্যাংক</b></div>
   <p class="muted">ফেব্রুয়ারি মাসে শেষ তারিখ হবে মাসের শেষ দিন। জরিমানা ও বকেয়া সমন্বয়ের পূর্ণাঙ্গ হিসাব পরবর্তী সংস্করণে যুক্ত ও যাচাই করা হবে।</p>
  </div>
+ <div class="panel">
+  <h3>হিসাবের স্বচ্ছতা</h3>
+  <p class="muted">নতুন, সম্পাদিত ও বাতিল করা লেনদেনের রেকর্ড আলাদাভাবে দেখুন।</p>
+  <button class="secondary" onclick="openView('audit')">কার্যক্রমের ইতিহাস দেখুন</button>
+ </div>
+</section>
+
+<section id="audit" class="view">
+ <button class="back" onclick="openView('info')">← তথ্য পাতায় ফিরুন</button><h2>কার্যক্রমের ইতিহাস</h2>
+ <p class="muted">নতুন, সম্পাদিত ও বাতিল করা জমা/জরিমানার রেকর্ড এখানে থাকবে। বাতিল এন্ট্রি সক্রিয় হিসাবের মোটে যোগ হবে না, তবে এই ইতিহাসে সংরক্ষিত থাকবে।</p>
+ <div class="panel" id="auditLog"></div>
 </section>
 
 <section id="settings" class="view">
@@ -136,6 +162,16 @@ input,select{width:100%;padding:12px;border:1px solid #cbd9cf;border-radius:11px
  <label style="margin-top:18px">আগের ব্যাকআপ পুনরুদ্ধার</label><input type="file" id="restoreFile" accept=".json,application/json" onchange="restoreBackup(event)">
 </section>
 </main>
+<div id="editPaymentModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="editPaymentTitle" onclick="if(event.target===this)closePaymentEditor()">
+ <div class="modal-card">
+  <h2 id="editPaymentTitle">জমার তথ্য সম্পাদনা</h2><p class="muted">প্রয়োজনীয় তথ্য পরিবর্তন করে সংরক্ষণ করো।</p>
+  <label for="editPayMember">সদস্যের নাম</label><select id="editPayMember"></select>
+  <label for="editPayAmount">জমার পরিমাণ (৳)</label><input id="editPayAmount" type="number" min="1" step="1" inputmode="numeric">
+  <label for="editPayDate">জমার তারিখ</label><input id="editPayDate" type="date" min="2026-05-01">
+  <label for="editPayMethod">জমার মাধ্যম</label><select id="editPayMethod"><option value="বিকাশ">বিকাশ</option><option value="নগদ">নগদ</option><option value="ব্যাংক">ব্যাংক</option></select>
+  <div class="modal-actions"><button class="secondary" type="button" onclick="closePaymentEditor()">বাতিল</button><button class="primary" type="button" onclick="savePaymentEdit()">পরিবর্তন সংরক্ষণ</button></div>
+ </div>
+</div>
 <nav class="bottom">
  <button class="active" data-view="home" onclick="openView('home')"><b>⌂</b>হোম</button>
  <button data-view="history" onclick="openView('history')"><b>◷</b>ইতিহাস</button>
@@ -149,26 +185,58 @@ const seed = [
 ];
 const KEY='fourteenAssociationDataV1';
 let data=JSON.parse(localStorage.getItem(KEY)||'null');
-if(!data){data={members:seed.map((x,i)=>({id:i+1,name:x[0],share:x[1],active:true,paused:false,profile:{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]}})),payments:[]};save();}\ndata.members.forEach(m=>{m.profile=m.profile||{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]};m.profile.documents=m.profile.documents||[];m.paused=!!m.paused;});
+const makeSeedMembers=()=>seed.map((x,i)=>({id:i+1,name:x[0],share:x[1],active:true,paused:false,profile:{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]}}));
+if(!data){data={members:makeSeedMembers(),payments:[],fines:[]};}
+// Recovery: some file viewers may create an empty app record before the member roster is initialized.
+// Restore the built-in roster only when the stored member list is missing or empty; keep all other records.
+if(!Array.isArray(data.members)||data.members.length===0){data.members=makeSeedMembers();localStorage.setItem(KEY,JSON.stringify(data));}
+data.payments=Array.isArray(data.payments)?data.payments:[];
+data.fines=Array.isArray(data.fines)?data.fines:[];
+data.fines=data.fines||[];data.audit=data.audit||[];data.payments.forEach(x=>{if(x.cancelled===undefined)x.cancelled=false});data.fines.forEach(x=>{if(x.cancelled===undefined)x.cancelled=false});
+data.members.forEach(m=>{m.profile=m.profile||{father:'',mother:'',phone:'',address:'',joinDate:'',notes:'',documents:[]};m.profile.documents=m.profile.documents||[];m.paused=!!m.paused;});
 function save(){localStorage.setItem(KEY,JSON.stringify(data));renderAll();}
+function logChange(type,action,record,details){data.audit=data.audit||[];const member=data.members.find(m=>m.id===record.memberId);data.audit.unshift({id:Date.now(),type,action,recordId:record.id,memberId:record.memberId,memberName:member?.name||'সদস্য',amount:Number(record.amount||0),month:record.month||(record.date?record.date.slice(0,7):''),paymentDate:record.date||'',method:record.method||'',at:new Date().toISOString(),cancelledAt:record.cancelledAt||'',details});if(data.audit.length>1000)data.audit.length=1000;}
 function money(n){return '৳ '+Number(n||0).toLocaleString('bn-BD')}
 function bnDate(s){try{return new Date(s+'T00:00:00').toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'})}catch(e){return s}}
 function openView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));renderAll();window.scrollTo(0,0)}
 function renderAll(){
- document.getElementById('totalCollected').textContent=money(data.payments.reduce((a,p)=>a+Number(p.amount),0));
- const recent=[...data.payments].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
+ document.getElementById('totalCollected').textContent=money(data.payments.filter(p=>!p.cancelled).reduce((a,p)=>a+Number(p.amount),0));
+ const fineTotal=(data.fines||[]).filter(f=>!f.cancelled).reduce((a,f)=>a+Number(f.amount||0),0);
+ const fineTotalEl=document.getElementById('fineLedgerTotal');if(fineTotalEl)fineTotalEl.textContent=money(fineTotal);
+ const recent=[...data.payments].filter(p=>!p.cancelled).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
  document.getElementById('recent').innerHTML=recent.length?recent.map(p=>{let m=data.members.find(x=>x.id===p.memberId);return `<div class="listitem"><span><b>${esc(m?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`}).join(''):'<div class="empty">এখনো কোনো জমার এন্ট্রি নেই।</div>';
  const sel=document.getElementById('payMember');if(sel){let old=sel.value;sel.innerHTML=data.members.filter(m=>m.active).map(m=>`<option value="${m.id}">${esc(m.name)} — ${money(m.share)}</option>`).join('');if(old)sel.value=old}
+ const fsel=document.getElementById('fineMember');if(fsel){let old=fsel.value;fsel.innerHTML=data.members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('');if(old)fsel.value=old}
  document.getElementById('memberList').innerHTML=data.members.map(m=>`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মাসিক শেয়ার: ${money(m.share)} · ${m.active?'সক্রিয়':'নিষ্ক্রিয়'}</small></span><span><button class="secondary smallbtn" onclick="openMemberProfile(${m.id})">প্রোফাইল</button></span></div>`).join('');
- renderReport();renderDues();renderHistory();
+ renderReport();renderDues();renderHistory();renderFineHistory();renderAudit();
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function addPayment(){
  let id=Number(document.getElementById('payMember').value),amount=Number(document.getElementById('payAmount').value),date=document.getElementById('payDate').value,method=document.getElementById('payMethod').value;
  if(!id||!Number.isFinite(amount)||amount<=0||!date){alert('সদস্য, সঠিক জমার পরিমাণ ও তারিখ দাও।');return}
  if(date<'2026-05-01'){alert('হিসাব মে ২০২৬ থেকে শুরু।');return}
- data.payments.push({id:Date.now(),memberId:id,amount,date,method});document.getElementById('payAmount').value='';save();alert('জমার তথ্য সংরক্ষিত হয়েছে।');openView('home');
+ const rec={id:Date.now(),memberId:id,amount,date,method,cancelled:false};data.payments.push(rec);logChange('জমা','নতুন এন্ট্রি',rec,`পরিমাণ ${money(amount)} · ${date} · ${method}`);document.getElementById('payAmount').value='';save();alert('জমার তথ্য সংরক্ষিত হয়েছে।');openView('home');
 }
+function addFine(){
+ let memberId=Number(document.getElementById('fineMember').value),month=document.getElementById('fineMonth').value,amount=Number(document.getElementById('fineAmount').value),date=document.getElementById('fineDate').value,method=document.getElementById('fineMethod').value;
+ if(!memberId||!month||!Number.isFinite(amount)||amount<=0||!date){alert('সদস্য, জরিমানার মাস, সঠিক পরিমাণ ও তারিখ দাও।');return}
+ if(month<'2026-05'||date<'2026-05-01'){alert('হিসাব মে ২০২৬ থেকে শুরু।');return}
+ data.fines=data.fines||[];const rec={id:Date.now(),memberId,month,amount,date,method,cancelled:false};data.fines.push(rec);logChange('জরিমানা','নতুন এন্ট্রি',rec,`${month} · ${money(amount)} · ${date} · ${method}`);document.getElementById('fineAmount').value='';save();alert('জরিমানার তথ্য আলাদা খাতায় সংরক্ষিত হয়েছে।');
+}
+function renderFineHistory(){
+ const el=document.getElementById('fineHistory');if(!el)return;
+ const items=[...(data.fines||[])].filter(f=>!f.cancelled).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ const total=items.reduce((a,f)=>a+Number(f.amount||0),0);document.getElementById('fineLedgerTotal').textContent=money(total);
+ el.innerHTML=items.length?items.map(f=>`<div class="listitem"><span><b>${esc(data.members.find(m=>m.id===f.memberId)?.name||'সদস্য')}</b><br><small class="muted">জরিমানার মাস: ${esc(f.month)} · জমা: ${bnDate(f.date)} · ${esc(f.method)}</small><br><button class="secondary smallbtn" onclick="editFine(${f.id})">সম্পাদনা</button><button class="danger smallbtn" onclick="cancelFine(${f.id})">বাতিল</button></span><b>${money(f.amount)}</b></div>`).join(''):'<div class="empty">এখনো কোনো জরিমানা আদায়ের এন্ট্রি নেই।</div>';
+}
+function editFine(id){const f=data.fines.find(x=>x.id===id&&!x.cancelled);if(!f)return; if(!confirm('এই জরিমানার এন্ট্রি সম্পাদনা করবে?'))return;
+ const old={...f};const roster=data.members.map(m=>`${m.id}: ${m.name}`).join('\n');const memberId=Number(prompt('সদস্যের ID লিখুন (তালিকা):\n'+roster,f.memberId));if(!data.members.some(m=>m.id===memberId))return alert('সদস্যের ID সঠিক নয়।');const amount=Number(prompt('জরিমানার পরিমাণ (৳)',f.amount));if(!Number.isFinite(amount)||amount<=0)return alert('সঠিক পরিমাণ দিতে হবে।');
+ const date=prompt('জমার তারিখ (YYYY-MM-DD)',f.date);if(!date||!/^\d{4}-\d{2}-\d{2}$/.test(date))return alert('তারিখের ফরম্যাট সঠিক নয়।');
+ const month=prompt('জরিমানার মাস (YYYY-MM)',f.month);if(!month||!/^\d{4}-\d{2}$/.test(month))return alert('মাসের ফরম্যাট সঠিক নয়।');
+ const method=prompt('জমার মাধ্যম (বিকাশ/নগদ/ব্যাংক)',f.method);if(!method)return;
+ f.memberId=memberId;f.amount=amount;f.date=date;f.month=month;f.method=method;logChange('জরিমানা','সম্পাদনা',f,`আগে ${money(old.amount)} / ${old.month} / ${old.date}; এখন ${money(amount)} / ${month} / ${date}`);save();alert('জরিমানার এন্ট্রি সংশোধন হয়েছে।');}
+function cancelFine(id){const f=data.fines.find(x=>x.id===id&&!x.cancelled);if(!f||!confirm('এই জরিমানার এন্ট্রি বাতিল করবে? বাতিল এন্ট্রি হিসাবের মোটে ধরা হবে না।'))return;f.cancelled=true;f.cancelledAt=new Date().toISOString();logChange('জরিমানা','বাতিল',f,`জরিমানার মাস ${f.month} · ${money(f.amount)} · জমার তারিখ ${f.date} · ${f.method}`);save();}
+
 function addMember(){
  let name=document.getElementById('newName').value.trim(),share=Number(document.getElementById('newShare').value);
  if(!name||share<=0){alert('নাম ও সঠিক মাসিক চাঁদা লিখুন।');return}
@@ -180,7 +248,7 @@ function openMemberProfile(id){
  activeProfileId=id;const m=data.members.find(x=>x.id===id);if(!m)return;
  const p=m.profile||{};document.getElementById('profileTitle').textContent=m.name+' — প্রোফাইল';
  const docs=(p.documents||[]).map((d,i)=>`<div class="docitem">📎 ${esc(d.name)} <a href="${d.data}" download="${esc(d.name)}">ডাউনলোড</a> <button class="secondary smallbtn danger" onclick="removeMemberDoc(${i})">মুছুন</button></div>`).join('')||'<p class="muted">এখনো কোনো ফরম বা নথি আপলোড করা হয়নি।</p>';
- const paid=data.payments.filter(x=>x.memberId===id).reduce((a,x)=>a+Number(x.amount),0);
+ const paid=data.payments.filter(x=>!x.cancelled&&String(x.memberId)===String(id)).reduce((a,x)=>a+Number(x.amount||0),0);
  document.getElementById('profileContent').innerHTML=`
  <div class="listitem"><b>মাসিক শেয়ার</b><b>${money(m.share)}</b></div>
  <label>সদস্যের নাম</label><input id="pfName" value="${esc(m.name)}">
@@ -198,8 +266,14 @@ function openMemberProfile(id){
  <hr><h3>সদস্য ফরম ও নথি</h3><label>ফরম/নথি আপলোড (PDF, JPG, PNG)</label><input id="pfDoc" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
  <p class="filehint">ছোট ফাইল আপলোড করো (প্রতি ফাইল সর্বোচ্চ ১.৫ MB)। ডেটা এই ফোনের ব্রাউজারে থাকবে; ব্যাকআপে নথিও যুক্ত হবে।</p>
  <button class="secondary" onclick="uploadMemberDoc()">নথি সংরক্ষণ</button>${docs}
- <hr><h3>আর্থিক সারসংক্ষেপ</h3><div class="listitem"><span>এ পর্যন্ত মোট জমা</span><b>${money(paid)}</b></div>
+ <hr><h3>আর্থিক সারসংক্ষেপ</h3>
+ <div class="listitem"><span>এ পর্যন্ত মোট জমা</span><b>${money(paid)}</b></div>
+ <div id="memberLedgerSummary"></div>
  `;
+ const endMonth=getLocalMonth();
+ const ledger=getMemberLedger(id,endMonth);
+ const summary=document.getElementById('memberLedgerSummary');
+ summary.innerHTML=`<div class="listitem"><span>মে ২০২৬ থেকে নির্ধারিত চাঁদা</span><b>${money(ledger.expected)}</b></div><div class="listitem"><span>মোট বকেয়া</span><b>${money(ledger.due)}</b></div><div class="listitem"><span>অগ্রিম জমা</span><b>${money(ledger.advance)}</b></div><h3 style="margin-top:14px">মাসভিত্তিক সমন্বয়</h3>${ledger.months.map(r=>`<div class="listitem"><span>${monthName(r.month)}<br><small class="muted">চাঁদা ${money(r.share)} · সমন্বয় ${money(r.allocated)}</small></span><b>${r.due?`বাকি ${money(r.due)}`:'পরিশোধিত'}</b></div>`).join('')}`;
  openView('memberProfile');
 }
 function saveMemberProfile(){
@@ -230,31 +304,86 @@ function removeMemberDoc(i){
  const m=data.members.find(x=>x.id===activeProfileId);if(!m||!confirm('এই নথিটি মুছে ফেলবে?'))return;
  m.profile.documents.splice(i,1);save();openMemberProfile(m.id);
 }
-function monthList(end){let out=[],d=new Date(2026,4,1),last=new Date(end+'-01T00:00:00');while(d<=last){out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));d.setMonth(d.getMonth()+1)}return out}
-function renderHistory(){
- const items=[...data.payments].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
- document.getElementById('historyContent').innerHTML=items.length?items.map(p=>`<div class="listitem"><span><b>${esc(data.members.find(m=>m.id===p.memberId)?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`).join(''):'<div class="empty">এখনো কোনো জমার ইতিহাস নেই।</div>';
+function getLocalMonth(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function monthList(end){
+ const out=[];let [ey,em]=String(end||getLocalMonth()).split('-').map(Number);
+ if(!Number.isInteger(ey)||!Number.isInteger(em)||em<1||em>12)return out;
+ let y=2026,m=5,guard=0;
+ while((y<ey||(y===ey&&m<=em))&&guard++<240){out.push(y+'-'+String(m).padStart(2,'0'));m++;if(m>12){m=1;y++;}}
+ return out;
 }
+function shareForMonth(member,month){
+ const history=Array.isArray(member.shareHistory)?[...member.shareHistory]:[];
+ history.sort((a,b)=>String(a.effectiveFrom||'2026-05').localeCompare(String(b.effectiveFrom||'2026-05')));
+ let share=Number(member.share||0);
+ for(const h of history){const effective=String(h.effectiveFrom||'2026-05');if(effective<=month)share=Number(h.newShare||share);}
+ return Number.isFinite(share)?share:0;
+}
+function monthName(month){const [y,mo]=month.split('-').map(Number);return new Date(y,mo-1,1).toLocaleDateString('bn-BD',{month:'long',year:'numeric'});}
+function getMemberLedger(memberId,endMonth){
+ const member=data.members.find(x=>String(x.id)===String(memberId));
+ if(!member)return {months:[],paid:0,expected:0,due:0,advance:0};
+ const months=monthList(endMonth),paid=data.payments.filter(p=>!p.cancelled&&String(p.memberId)===String(memberId)).reduce((sum,p)=>sum+Math.max(0,Number(p.amount)||0),0);
+ const expected=months.reduce((sum,month)=>sum+shareForMonth(member,month),0);let remaining=paid;
+ const rows=months.map(month=>{const share=shareForMonth(member,month),allocated=Math.min(share,remaining);remaining=Math.max(0,remaining-allocated);const due=Math.max(0,share-allocated);return {month,share,allocated,due,status:due===0?'পরিশোধিত':allocated>0?'আংশিক':'বকেয়া'};});
+ const due=rows.reduce((sum,row)=>sum+row.due,0),advance=Math.max(0,paid-expected);
+ return {months:rows,paid,expected,due,advance};
+}
+function renderHistory(){
+ const items=[...data.payments].filter(p=>!p.cancelled).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ document.getElementById('historyContent').innerHTML=items.length?items.map(p=>`<div class="listitem"><span><b>${esc(data.members.find(m=>m.id===p.memberId)?.name||'সদস্য')}</b><br><small class="muted">${bnDate(p.date)} · ${esc(p.method)}</small><br><button class="secondary smallbtn" onclick="editPayment(${p.id})">সম্পাদনা</button><button class="danger smallbtn" onclick="cancelPayment(${p.id})">বাতিল</button></span><b>${money(p.amount)}</b></div>`).join(''):'<div class="empty">এখনো কোনো জমার ইতিহাস নেই।</div>';
+}
+let editingPaymentId=null;
+function editPayment(id){
+ const p=data.payments.find(x=>x.id===id&&!x.cancelled);if(!p)return;
+ editingPaymentId=id;
+ const memberSelect=document.getElementById('editPayMember');
+ memberSelect.innerHTML=data.members.map(m=>`<option value="${m.id}">${esc(m.name)}${m.active?'':' (নিষ্ক্রিয়)'}</option>`).join('');
+ memberSelect.value=String(p.memberId);
+ document.getElementById('editPayAmount').value=p.amount;
+ document.getElementById('editPayDate').value=p.date;
+ document.getElementById('editPayMethod').value=['বিকাশ','নগদ','ব্যাংক'].includes(p.method)?p.method:'বিকাশ';
+ document.getElementById('editPaymentModal').classList.add('show');
+}
+function closePaymentEditor(){document.getElementById('editPaymentModal').classList.remove('show');editingPaymentId=null;}
+function savePaymentEdit(){
+ const p=data.payments.find(x=>x.id===editingPaymentId&&!x.cancelled);if(!p){closePaymentEditor();return;}
+ const memberId=Number(document.getElementById('editPayMember').value),amount=Number(document.getElementById('editPayAmount').value),date=document.getElementById('editPayDate').value,method=document.getElementById('editPayMethod').value;
+ if(!data.members.some(m=>m.id===memberId)){alert('সদস্য নির্বাচন সঠিক নয়।');return;}
+ if(!Number.isSafeInteger(amount)||amount<=0){alert('জমার পরিমাণ ১ টাকা বা তার বেশি পূর্ণসংখ্যা হতে হবে।');return;}
+ if(!date||date<'2026-05-01'){alert('তারিখ সঠিক নয়; হিসাব মে ২০২৬ থেকে।');return;}
+ const dateParts=date.split('-').map(Number);const parsed=new Date(dateParts[0],dateParts[1]-1,dateParts[2]);if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(parsed.getTime())||parsed.getFullYear()!==dateParts[0]||parsed.getMonth()!==dateParts[1]-1||parsed.getDate()!==dateParts[2]){alert('সঠিক তারিখ নির্বাচন করো।');return;}
+ if(!['বিকাশ','নগদ','ব্যাংক'].includes(method)){alert('জমার মাধ্যম নির্বাচন সঠিক নয়।');return;}
+ if(!confirm('এই পরিবর্তনগুলো সংরক্ষণ করবে?'))return;
+ const old={...p},oldMember=data.members.find(m=>m.id===old.memberId)?.name||'সদস্য';
+ p.memberId=memberId;p.amount=amount;p.date=date;p.method=method;
+ const newMember=data.members.find(m=>m.id===memberId)?.name||'সদস্য';
+ logChange('জমা','সম্পাদনা',p,`আগে: ${oldMember} / ${money(old.amount)} / ${old.date} / ${old.method}; এখন: ${newMember} / ${money(amount)} / ${date} / ${method}`);
+ closePaymentEditor();save();alert('জমার তথ্য সফলভাবে সংশোধন হয়েছে।');
+}
+function cancelPayment(id){const p=data.payments.find(x=>x.id===id&&!x.cancelled);if(!p||!confirm('এই জমার এন্ট্রি বাতিল করবে? বাতিল এন্ট্রি মোট জমা থেকে বাদ যাবে।'))return;p.cancelled=true;p.cancelledAt=new Date().toISOString();logChange('জমা','বাতিল',p,`${money(p.amount)} · জমার তারিখ ${p.date} · ${p.method}`);save();}
+function renderAudit(){const el=document.getElementById('auditLog');if(!el)return;const items=(data.audit||[]).slice(0,200);el.innerHTML=items.length?items.map(a=>{const source=(a.type==='জরিমানা'?(data.fines||[]):data.payments).find(x=>x.id===a.recordId);const memberName=a.memberName||data.members.find(m=>m.id===a.memberId)?.name||'সদস্য';const amount=Number(a.amount||source?.amount||0)>0?`পরিমাণ: ${money(a.amount||source?.amount)} · `:'';const monthValue=a.month||source?.month||(source?.date?source.date.slice(0,7):'');const month=monthValue?`মাস: ${esc(monthValue)} · `:'';const dateValue=a.paymentDate||source?.date||'';const payDate=dateValue?`লেনদেনের তারিখ: ${bnDate(dateValue)} · `:'';const methodValue=a.method||source?.method||'';const method=methodValue?`মাধ্যম: ${esc(methodValue)} · `:'';const cancelTime=a.cancelledAt||source?.cancelledAt||(a.action==='বাতিল'?a.at:'');const cancelled=cancelTime?`বাতিলের সময়: ${new Date(cancelTime).toLocaleString('bn-BD')} · `:'';return `<div class="listitem"><span><b>${esc(a.type)} — ${esc(a.action)}</b><br><small class="muted">সদস্য: ${esc(memberName)}<br>${amount}${month}${payDate}${method}<br>${a.action==='বাতিল'?'বাতিলের সময়':'কার্যক্রমের সময়'}: ${new Date(a.at).toLocaleString('bn-BD')}<br>${cancelled}${esc(a.details||'')}</small></span></div>`}).join(''):'<div class="empty">এখনো কোনো কার্যক্রমের রেকর্ড নেই।</div>';}
+
 function renderReport(){
- let month=document.getElementById('reportMonth')?.value||'2026-11',payments=data.payments.filter(p=>p.date.slice(0,7)===month),total=payments.reduce((a,p)=>a+p.amount,0);
+ let month=document.getElementById('reportMonth')?.value||'2026-11',payments=data.payments.filter(p=>!p.cancelled&&p.date.slice(0,7)===month),total=payments.reduce((a,p)=>a+p.amount,0);
  document.getElementById('reportContent').innerHTML=`<div class="listitem"><span>এই মাসে মোট জমা</span><b>${money(total)}</b></div><div class="listitem"><span>জমার এন্ট্রি</span><b>${payments.length}টি</b></div>`+(payments.length?payments.map(p=>`<div class="listitem"><span>${esc(data.members.find(m=>m.id===p.memberId)?.name||'সদস্য')}<br><small class="muted">${bnDate(p.date)} · ${p.method}</small></span><b>${money(p.amount)}</b></div>`).join(''):'<div class="empty">এই মাসে কোনো জমার তথ্য নেই।</div>');
 }
 function renderDues(){
- let current=new Date(),end=current.getFullYear()+'-'+String(current.getMonth()+1).padStart(2,'0'),months=monthList(end);
+ const now=new Date(),end=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
  let html='';
  data.members.filter(m=>m.active).forEach(m=>{
-  let paid=data.payments.filter(p=>p.memberId===m.id).reduce((a,p)=>a+p.amount,0);
-  let expected=m.share*months.length;
-  let rough=Math.max(0,expected-paid);
-  if(rough>0)html+=`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">মোট নির্ধারিত ${money(expected)} · মোট জমা ${money(paid)}</small></span><b>${money(rough)}</b></div>`;
+  const ledger=getMemberLedger(m.id,end);
+  if(ledger.due>0)html+=`<div class="listitem"><span><b>${esc(m.name)}</b><br><small class="muted">নির্ধারিত ${money(ledger.expected)} · জমা ${money(ledger.paid)} · বকেয়া মাস ${ledger.months.filter(r=>r.due>0).length}টি</small></span><b>${money(ledger.due)}</b></div>`;
  });
- document.getElementById('duesContent').innerHTML=html||'<div class="empty">এই সরল হিসাবে কোনো বকেয়া দেখা যাচ্ছে না।</div>';
+ document.getElementById('duesContent').innerHTML=html||'<div class="empty">কোনো সদস্যের শেয়ার বকেয়া নেই।</div>';
 }
+
 function exportBackup(){
- let blob=new Blob([JSON.stringify({app:'Fourteen Association',version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fourteen-association-backup.json';a.click();URL.revokeObjectURL(url);
+ let blob=new Blob([JSON.stringify({app:'Fourteen Association',version:2,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fourteen-association-backup.json';a.click();URL.revokeObjectURL(url);
 }
-function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.data?.members||!x.data?.payments)throw Error();if(confirm('বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসাবেন?')){data=x.data;save();alert('ব্যাকআপ পুনরুদ্ধার হয়েছে।')}}catch(err){alert('এই ব্যাকআপ ফাইলটি সঠিক নয়।')}};r.readAsText(f)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.data?.members||!x.data?.payments)throw Error();x.data.fines=x.data.fines||[];if(confirm('বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসাবেন?')){data=x.data;save();alert('ব্যাকআপ পুনরুদ্ধার হয়েছে।')}}catch(err){alert('এই ব্যাকআপ ফাইলটি সঠিক নয়।')}};r.readAsText(f)}
 document.getElementById('payDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('fineDate').value=new Date().toISOString().slice(0,10);
 renderAll();
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
