@@ -20,7 +20,7 @@ jobs:
 
       - name: Extract APK Project
         run: |
-          unzip -o fourteen-association-apk-project.zip -d .
+          unzip -o *.zip -d .
 
       - name: Setup Java
         uses: actions/setup-java@v4
